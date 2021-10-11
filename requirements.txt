@@ -5,3 +5,4 @@ pick
 iso8601
 pytz
 humanize
+PyInstaller
