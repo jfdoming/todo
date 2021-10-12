@@ -7,10 +7,7 @@ class ClipboardView(Sink):
     def consume(self):
         data = ""
 
-        while True:
-            item = yield
-            if item is SENTINEL:
-                break
+        while (item := (yield)) != SENTINEL:
             data += item + "\n"
 
         p = subprocess.Popen(
