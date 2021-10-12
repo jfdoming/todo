@@ -3,7 +3,7 @@ from argparse import ArgumentParser
 from api import API
 from calendar_todo_list import CalendarTodoList
 from primary_todo_list import PrimaryTodoList
-from cli_tl_view import CliTlView
+from cli_view import CliView
 from clipboard_view import ClipboardView
 from process.standard import StandardFormatter
 from process.shareable import ShareableFormatter
@@ -28,7 +28,7 @@ def main():
     cal_lists = CalendarTodoList.from_user_calendars(api)
     primary_list = PrimaryTodoList(cal_lists)
 
-    views = [CliTlView()]
+    views = [CliView()]
 
     if args.shareable:
         formatter = ShareableFormatter()
