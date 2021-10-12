@@ -1,5 +1,5 @@
 from pipe.source import SENTINEL
-from process.formatter import Formatter
+from processors.formatter import Formatter
 
 class ShareableFormatter(Formatter):
     __ASSESSMENT_SHORT_FORMS = {

@@ -1,4 +1,4 @@
-from todo_list import TodoList
+from models.todo_list import TodoList
 
 class TodoGroup(TodoList):
     def __init__(self, children):

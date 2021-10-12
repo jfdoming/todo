@@ -1,5 +1,5 @@
 from pipe.source import SENTINEL
-from todo_list_view import TodoListView
+from views.todo_list_view import TodoListView
 
 class CliView(TodoListView):
     def consume(self):

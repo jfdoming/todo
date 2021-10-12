@@ -1,12 +1,12 @@
 from argparse import ArgumentParser
 
-from api import API
-from calendar_todo_list import CalendarTodoList
-from primary_todo_list import PrimaryTodoList
-from cli_view import CliView
-from clipboard_view import ClipboardView
-from process.standard import StandardFormatter
-from process.shareable import ShareableFormatter
+from calendar_api import CalendarAPI
+from models.calendar_todo_list import CalendarTodoList
+from models.primary_todo_list import PrimaryTodoList
+from views.cli_view import CliView
+from views.clipboard_view import ClipboardView
+from processors.standard import StandardFormatter
+from processors.shareable import ShareableFormatter
 
 
 def main():
@@ -24,7 +24,7 @@ def main():
     )
     args = parser.parse_args()
 
-    api = API()
+    api = CalendarAPI()
     cal_lists = CalendarTodoList.from_user_calendars(api)
     primary_list = PrimaryTodoList(cal_lists)
 

@@ -1,5 +1,5 @@
 from pipe.source import SENTINEL
-from process.formatter import Formatter
+from processors.formatter import Formatter
 
 class StandardFormatter(Formatter):
     def process(self):

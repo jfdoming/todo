@@ -8,9 +8,9 @@ from datetime import datetime, timedelta
 import iso8601
 import pytz
 
-from event import Event
+from models.event import Event
 
-class API:
+class CalendarAPI:
     __SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
 
     def __init__(self):
@@ -22,14 +22,19 @@ class API:
         # created automatically when the authorization flow completes for the first
         # time.
         if os.path.exists("token.json"):
-            creds = Credentials.from_authorized_user_file("token.json", API.__SCOPES)
+            creds = Credentials.from_authorized_user_file(
+                "token.json",
+                CalendarAPI.__SCOPES,
+            )
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
             if creds and creds.expired and creds.refresh_token:
                 creds.refresh(Request())
             else:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    "credentials.json", API.__SCOPES)
+                    "credentials.json",
+                    CalendarAPI.__SCOPES,
+                )
                 creds = flow.run_console()
             # Save the credentials for the next run
             with open("token.json", "w") as token:

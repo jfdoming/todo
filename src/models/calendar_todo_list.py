@@ -4,8 +4,8 @@ from pick import pick
 import json
 from datetime import datetime, timedelta
 
-from todo_list import TodoList
-from todo_item import TodoItem
+from models.todo_list import TodoList
+from models.todo_item import TodoItem
 
 class CalendarTodoList(TodoList):
     def __init__(self, api, cid):
