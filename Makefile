@@ -6,7 +6,7 @@ run:
 	@. env/bin/activate && python3 src/main.py
 
 build:
-	@. env/bin/activate && pyinstaller src/main.py -Fn todo
+	@. env/bin/activate && pyinstaller src/main.py -Dyn todo
 
 install:
 	@[ -d env ] || python3 -m venv env
