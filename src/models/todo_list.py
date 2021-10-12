@@ -1,12 +1,10 @@
-from abc import abstractmethod
-
 from pipe.source import Source
 
 class TodoList(Source):
-    @abstractmethod
-    def list(self):
-        pass
+    def __init__(self, children):
+        super().__init__()
+        self.children = children
 
-    def produce(self):
-        yield from self.list()
-
+    def _produce(self):
+        for child in self.children:
+            yield from child.produce()

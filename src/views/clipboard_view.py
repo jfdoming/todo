@@ -1,10 +1,10 @@
 import subprocess
 
-from pipe.source import SENTINEL
+from pipe import SENTINEL
 from pipe.sink import Sink
 
 class ClipboardView(Sink):
-    def consume(self):
+    def _consume(self):
         data = ""
 
         while (item := (yield)) != SENTINEL:

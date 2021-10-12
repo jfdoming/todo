@@ -1,4 +1,4 @@
-from pipe.source import SENTINEL
+from pipe import SENTINEL
 from processors.formatter import Formatter
 
 class ShareableFormatter(Formatter):
@@ -27,7 +27,7 @@ class ShareableFormatter(Formatter):
 
         return " ".join(parts)
 
-    def process(self):
+    def _process(self):
         while True:
             item = yield
             if item is SENTINEL:

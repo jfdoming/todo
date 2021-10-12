@@ -1,8 +1,8 @@
-from pipe.source import SENTINEL
+from pipe import SENTINEL
 from processors.formatter import Formatter
 
 class StandardFormatter(Formatter):
-    def process(self):
+    def _process(self):
         now = self._now()
 
         while True:

@@ -4,11 +4,13 @@ from pick import pick
 import json
 from datetime import datetime, timedelta
 
-from models.todo_list import TodoList
+from pipe.source import Source
 from models.todo_item import TodoItem
 
-class CalendarTodoList(TodoList):
+class EventList(Source):
     def __init__(self, api, cid):
+        super().__init__()
+
         self.api = api
         self.cid = cid
 
@@ -34,11 +36,11 @@ class CalendarTodoList(TodoList):
                 calendars.write(json.dumps(selected_calendars))
 
         return list(map(
-            lambda c: CalendarTodoList(api, c),
+            lambda c: EventList(api, c),
             selected_calendars,
         ))
 
-    def list(self):
+    def _produce(self):
         start = datetime.utcnow()
         end = start + timedelta(days=14)
 
@@ -47,9 +49,5 @@ class CalendarTodoList(TodoList):
             start=start,
             end=end,
         )
-        for i in range(len(events)):
-            event = events[i]
-            events[i] = TodoItem(event.summary, event.start)
 
-        return events
-
+        yield from iter(events)
