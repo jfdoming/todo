@@ -20,17 +20,17 @@ class EventList(Source):
             with open("calendars.json", "r") as calendars:
                 selected_calendars = json.loads(calendars.read())
         except:
-            pass
+            selected_calendars = None
 
         if selected_calendars is None:
-            calendars = api.list_calendars()
-            selected_calendars = map(lambda c: c[0][0], pick(
+            calendars = api.get_calendars()
+            selected_calendars = list(map(lambda c: c[0][0], pick(
                 calendars,
                 "Please mark your TODO calendars (SPACE to mark, ENTER to confirm):",
                 multiselect=True,
                 min_selection_count=1,
                 options_map_func=lambda t: t[1],
-            ))
+            )))
 
             with open("calendars.json", "w") as calendars:
                 calendars.write(json.dumps(selected_calendars))
