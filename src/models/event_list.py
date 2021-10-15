@@ -1,3 +1,4 @@
+import sys
 import os.path
 
 from pick import pick
@@ -17,7 +18,8 @@ class EventList(Source):
     @classmethod
     def from_user_calendars(cls, api):
         try:
-            with open("calendars.json", "r") as calendars:
+            cal_file = os.path.join(os.path.dirname(sys.argv[0]), "calendars.json")
+            with open(cal_file, "r") as calendars:
                 selected_calendars = json.loads(calendars.read())
         except:
             selected_calendars = None
