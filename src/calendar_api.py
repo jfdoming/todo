@@ -8,8 +8,12 @@ import os.path
 from datetime import datetime, timedelta
 import iso8601
 import pytz
+import json
+import re
 
 from models.event import Event
+
+_DESC_REGEX = re.compile(r">>>>>TODO<<<<<\n(.*)\n>>>END TODO<<<", re.MULTILINE)
 
 class CalendarAPI:
     __SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
@@ -92,6 +96,14 @@ class CalendarAPI:
                 start = iso8601.parse_date(start_obj["date"])
             else:
                 continue
-            events[i] = Event(start=start, summary=event["summary"])
+
+            desc_raw = event.get("description")
+            status = Event.STATUS_TODO
+            if desc_raw is not None and desc_raw:
+                desc = _DESC_REGEX.findall(desc_raw)
+                if desc:
+                    metadata = json.loads(desc[0])
+                    status = metadata.get("status", Event.STATUS_TODO)
+            events[i] = Event(start=start, summary=event["summary"], status=status)
 
         return events

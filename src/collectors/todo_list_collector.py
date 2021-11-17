@@ -7,6 +7,8 @@ class TodoListCollector(Sink):
         todos = []
 
         while (item := (yield)) != SENTINEL:
+            if item is None:
+                continue
             todos.append(item)
 
         todos.sort()
