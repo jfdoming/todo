@@ -10,6 +10,6 @@ class StandardFormatter(Formatter):
             if item is SENTINEL:
                 break
 
-            yield f"{item.summary} - {self._format_date(item.deadline, now)}"
+            yield f"{hash(item):0{16}x} {item.summary} - {self._format_date(item.deadline, now)}"
 
         yield

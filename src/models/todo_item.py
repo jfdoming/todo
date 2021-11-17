@@ -1,3 +1,5 @@
+import hashlib
+
 from pipe.source import Source
 from models.todo_type import TodoType
 
@@ -19,3 +21,9 @@ class TodoItem(Source):
 
     def _produce(self):
         yield self
+
+    def __hash__(self):
+        m = hashlib.md5()
+        m.update(self.summary.encode())
+        m.update(str(self.deadline).encode())
+        return int(m.hexdigest(), 16)
