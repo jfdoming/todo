@@ -1,7 +1,7 @@
 from pipe import SENTINEL
-from views.todo_list_view import TodoListView
+from pipe.sink import Sink
 
-class CliView(TodoListView):
+class CliView(Sink):
     def _consume(self):
         seen_any = False
         while (item := (yield)) != SENTINEL:
