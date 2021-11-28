@@ -4,9 +4,10 @@ from pipe.source import Source
 from models.todo_type import TodoType
 
 class TodoItem(Source):
-    def __init__(self, summary, deadline=None):
+    def __init__(self, summary, deadline=None, event_source=None):
         self.summary = summary
         self.deadline = deadline
+        self.event_source = event_source
 
         self.type = TodoType.from_summary(self.summary)
 

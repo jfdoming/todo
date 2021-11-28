@@ -10,4 +10,4 @@ class EventProcessor(Processor):
             if item.status == Event.STATUS_DONE:
                 yield
                 continue
-            yield TodoItem(item.summary, item.start)
+            yield TodoItem(item.summary, item.start, event_source=item)

@@ -13,10 +13,11 @@ import re
 
 from models.event import Event
 
-_DESC_REGEX = re.compile(r">>>>>TODO<<<<<\n(.*)\n>>>END TODO<<<", re.MULTILINE)
+_DESC_FMT = ">>>>>TODO<<<<<\n{}\n>>>END TODO<<<"
+_DESC_REGEX = re.compile(_DESC_FMT.format("(.*)"), re.MULTILINE)
 
 class CalendarAPI:
-    __SCOPES = ["https://www.googleapis.com/auth/calendar.readonly"]
+    __SCOPES = ["https://www.googleapis.com/auth/calendar"]
 
     def __init__(self):
         self.service = self.__get_service()
@@ -104,6 +105,52 @@ class CalendarAPI:
                 if desc:
                     metadata = json.loads(desc[0])
                     status = metadata.get("status", Event.STATUS_TODO)
-            events[i] = Event(start=start, summary=event["summary"], status=status)
+            events[i] = Event(
+                raw=event,
+                calendar_id=cid,
+                start=start,
+                summary=event["summary"],
+                description=desc_raw,
+                status=status,
+            )
 
         return events
+
+    def batch_mark_done(self, events):
+        exceptions = []
+        def _callback(rid, response, exception):
+            if exception is not None:
+                exceptions.append(exception)
+
+        metadata = json.dumps({
+            "status": Event.STATUS_DONE,
+        })
+
+        batch = self.service.new_batch_http_request(_callback)
+        for event in events:
+            body = event.raw
+            description = "" if event.description is None else event.description
+            desc = _DESC_REGEX.findall(description)
+            if desc:
+                description = _DESC_REGEX.sub(
+                    _DESC_FMT.format(metadata) + "\n",
+                    description
+                )
+            else:
+                if description:
+                    description += "\n"
+                description += _DESC_FMT.format(metadata)
+            body.update({
+                "description": description,
+            })
+
+            batch.add(self.service.events().update(
+                calendarId=event.cid,
+                eventId=event.raw.get("id"),
+                body=body,
+            ))
+
+        batch.execute()
+
+        if exceptions:
+            print(exceptions)
