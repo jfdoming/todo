@@ -1,9 +1,11 @@
+ARGS=
+
 .PHONY: all run build install
 
 all: run
 
 run:
-	@. env/bin/activate && python3 src/main.py
+	@. env/bin/activate && python3 src/main.py $(ARGS)
 
 build:
 	@. env/bin/activate && pyinstaller src/main.py -Dyn todo
