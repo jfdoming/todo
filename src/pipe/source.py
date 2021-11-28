@@ -43,7 +43,7 @@ class Source(ABC):
             result for result_list in (
                 Source._terminate(child)
                 for child in all_children
-            ) for result in result_list
-            if result_list is not None
+            ) if result_list is not None
+            for result in result_list
         ]
         return results
