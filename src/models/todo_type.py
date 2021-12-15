@@ -1,10 +1,9 @@
 from enum import Enum, unique
-from typing import Optional, Dict
+from utils.enum_dict import enum_dict
 
 @unique
+@enum_dict
 class TodoType(Enum):
-    _TodoType__NAME_TO_ENUM: Optional[Dict[str, TodoType]] = None # See below.
-
     DEFAULT = ""
     ASSIGNMENT = "assignment"
     QUIZ = "quiz"
@@ -33,10 +32,5 @@ class TodoType(Enum):
             return TodoType.DEFAULT
         parts = parts[2:]
         for part in parts:
-            if part.lower() in TodoType.__NAME_TO_ENUM:
-                return TodoType.__NAME_TO_ENUM[part.lower()]
-
-TodoType._TodoType__NAME_TO_ENUM = {
-    TodoType[member].human_name: TodoType[member]
-    for member in TodoType.__members__
-}
+            if part.lower() in TodoType._NAME_TO_ENUM:
+                return TodoType._NAME_TO_ENUM[part.lower()]

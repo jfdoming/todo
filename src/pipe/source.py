@@ -1,7 +1,7 @@
 from abc import ABC, abstractmethod
 
 from pipe import SENTINEL
-from pipe.single_iter import single_iter
+from utils.single_iter import single_iter
 
 class Source(ABC):
     def __init__(self):

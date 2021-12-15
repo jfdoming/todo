@@ -1,9 +1,9 @@
 from abc import abstractmethod
 
 from pipe import SENTINEL
-from pipe.single_iter import single_iter
 from pipe.source import Source
 from pipe.sink import Sink
+from utils.single_iter import single_iter
 
 class Processor(Source, Sink):
     @abstractmethod

@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from pipe.single_iter import single_iter
+from utils.single_iter import single_iter
 
 class Sink(ABC):
     @abstractmethod
