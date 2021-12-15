@@ -1,7 +1,10 @@
 from enum import Enum, unique
+from typing import Optional, Dict
 
 @unique
 class TodoType(Enum):
+    _TodoType__NAME_TO_ENUM: Optional[Dict[str, TodoType]] = None # See below.
+
     DEFAULT = ""
     ASSIGNMENT = "assignment"
     QUIZ = "quiz"
