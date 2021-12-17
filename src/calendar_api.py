@@ -36,9 +36,15 @@ class CalendarAPI:
             )
         # If there are no (valid) credentials available, let the user log in.
         if not creds or not creds.valid:
+            create_new_token = True
             if creds and creds.expired and creds.refresh_token:
-                creds.refresh(Request())
-            else:
+                try:
+                    creds.refresh(Request())
+                    create_new_token = False
+                except:
+                    pass
+
+            if create_new_token:
                 flow = InstalledAppFlow.from_client_secrets_file(
                     os.path.join(root, "credentials.json"),
                     CalendarAPI.__SCOPES,
