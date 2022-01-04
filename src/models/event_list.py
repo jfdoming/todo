@@ -9,14 +9,15 @@ from pipe.source import Source
 from models.todo_item import TodoItem
 
 class EventList(Source):
-    def __init__(self, api, cid):
+    def __init__(self, api, cid, offset=None):
         super().__init__()
 
         self.api = api
         self.cid = cid
+        self.offset = offset
 
     @classmethod
-    def from_user_calendars(cls, api):
+    def from_user_calendars(cls, api, offset=None):
         try:
             cal_file = os.path.join(os.path.dirname(sys.argv[0]), "calendars.json")
             with open(cal_file, "r") as calendars:
@@ -38,12 +39,15 @@ class EventList(Source):
                 calendars.write(json.dumps(selected_calendars))
 
         return list(map(
-            lambda c: EventList(api, c),
+            lambda c: EventList(api, c, offset=offset),
             selected_calendars,
         ))
 
     def _produce(self):
+        offset = self.offset
         start = datetime.utcnow()
+        if offset is not None:
+            start += offset
         end = start + timedelta(days=14)
 
         events = self.api.get_upcoming_events(

@@ -1,5 +1,4 @@
-from argparse import ArgumentParser
-
+from args import parse_args
 from pipe.source import Source
 from calendar_api import CalendarAPI
 from models.event_list import EventList
@@ -13,29 +12,10 @@ from collectors.done_collector import DoneCollector
 
 
 def main():
-    parser = ArgumentParser(
-        prog="todo",
-        description=(
-            "Command-line TODO utility, integrated with Google Calendar."
-        ),
-    )
-    parser.add_argument(
-        "-s",
-        "--shareable",
-        dest="shareable",
-        action="store_true",
-    )
-    parser.add_argument(
-        "-d",
-        "--done",
-        dest="done",
-        action="append",
-        default=[],
-    )
-    args = parser.parse_args()
+    args = parse_args()
 
     api = CalendarAPI()
-    cal_lists = EventList.from_user_calendars(api)
+    cal_lists = EventList.from_user_calendars(api, offset=args.offset)
 
     # Convert all calendar events to Todo items.
     todo_collector = TodoListCollector()
