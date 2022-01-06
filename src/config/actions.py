@@ -1,3 +1,5 @@
+from config.expansion import Expansion
+
 class Action:
     pass
 
@@ -5,9 +7,10 @@ class FilterDeadlineAction(Action):
     def __init__(self, action):
         self.after = action["after"]
 
+
 class ExpandAction(Action):
     def __init__(self, action):
-        self.to = action["to"]
+        self.to = list(map(Expansion, action["to"]))
 
 _ACTIONS = ("type", {
     "filter": ("target", {
@@ -17,7 +20,7 @@ _ACTIONS = ("type", {
 })
 
 def get_action(action, lookup=None):
-    if type(lookup) == type:
+    if isinstance(lookup, type):
         return lookup(action)
 
     if lookup is None:
