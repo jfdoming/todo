@@ -1,0 +1,71 @@
+{
+    "courses": ["CS343", "CS456", "CS458", "CS484", "CS486", "PSYCH101"],
+    "steps": [
+        {
+            "criteria": [
+                {
+                    "target": "course",
+                    "equals": "CS486"
+                },
+                {
+                    "target": "type",
+                    "equals": "assignment"
+                }
+            ],
+            "actions": [{
+                "type": "expand",
+                "to": [
+                    {
+                        "name": "milestone 1",
+                        "deadline": "-2w",
+                        "numbering": "keep"
+                    },
+                    {
+                        "name": "milestone 2",
+                        "deadline": "-1w",
+                        "numbering": "keep"
+                    }
+                ]
+            }]
+        },
+        {
+            "criteria": [
+                {
+                    "target": "course",
+                    "equals": "PSYCH101"
+                },
+                {
+                    "target": "type",
+                    "equals": "assignment"
+                }
+            ],
+            "actions": [{
+                "type": "expand",
+                "to": ["module", "reading", "quiz"]
+            }]
+        },
+        {
+            "criteria": [
+                {
+                    "target": "course",
+                    "equals": "CS486"
+                },
+                {
+                    "target": "type",
+                    "equals": "quiz"
+                }
+            ],
+            "actions": [
+                {
+                    "type": "filter",
+                    "target": "deadline",
+                    "after": "-2d"
+                },
+                {
+                    "type": "expand",
+                    "to": ["lecture", "quiz"]
+                }
+            ]
+        }
+    ]
+}

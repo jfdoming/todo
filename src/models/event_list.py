@@ -5,6 +5,7 @@ from pick import pick
 import json
 from datetime import datetime, timedelta
 
+from config import CALENDARS_FILE
 from pipe.source import Source
 from models.todo_item import TodoItem
 
@@ -19,8 +20,7 @@ class EventList(Source):
     @classmethod
     def from_user_calendars(cls, api, offset=None):
         try:
-            cal_file = os.path.join(os.path.dirname(sys.argv[0]), "calendars.json")
-            with open(cal_file, "r") as calendars:
+            with open(CALENDARS_FILE, "r") as calendars:
                 selected_calendars = json.loads(calendars.read())
         except:
             selected_calendars = None

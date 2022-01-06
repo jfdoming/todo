@@ -5,7 +5,7 @@ ARGS=
 all: run
 
 run:
-	@. env/bin/activate && python3 src/main.py $(ARGS)
+	@. env/bin/activate && CONFIG_HOME=config python3 src/main.py $(ARGS)
 
 build:
 	@. env/bin/activate && pyinstaller -p src/ src/main.py -Dyn todo

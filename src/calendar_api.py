@@ -3,7 +3,6 @@ from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
 from google.auth.transport.requests import Request
 
-import sys
 import os.path
 from datetime import datetime, timedelta
 import iso8601
@@ -11,6 +10,7 @@ import pytz
 import json
 import re
 
+from config import TOKEN_FILE, CREDENTIALS_FILE
 from models.event import Event
 
 _DESC_FMT = ">>>>>TODO<<<<<\n{}\n>>>END TODO<<<"
@@ -23,15 +23,13 @@ class CalendarAPI:
         self.service = self.__get_service()
 
     def __get_service(self):
-        root = os.path.dirname(sys.argv[0])
-
         creds = None
         # The file token.json stores the user"s access and refresh tokens, and is
         # created automatically when the authorization flow completes for the first
         # time.
-        if os.path.exists(os.path.join(root, "token.json")):
+        if os.path.exists(TOKEN_FILE):
             creds = Credentials.from_authorized_user_file(
-                os.path.join(root, "token.json"),
+                TOKEN_FILE,
                 CalendarAPI.__SCOPES,
             )
         # If there are no (valid) credentials available, let the user log in.
@@ -46,12 +44,12 @@ class CalendarAPI:
 
             if create_new_token:
                 flow = InstalledAppFlow.from_client_secrets_file(
-                    os.path.join(root, "credentials.json"),
+                    CREDENTIALS_FILE,
                     CalendarAPI.__SCOPES,
                 )
                 creds = flow.run_console()
             # Save the credentials for the next run
-            with open(os.path.join(root, "token.json"), "w") as token:
+            with open(TOKEN_FILE, "w") as token:
                 token.write(creds.to_json())
 
         return build("calendar", "v3", credentials=creds)
