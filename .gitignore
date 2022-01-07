@@ -144,3 +144,4 @@ cython_debug/
 credentials.json
 token.json
 calendars.json
+*.pkl

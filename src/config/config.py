@@ -1,4 +1,5 @@
 import json
+from datetime import datetime
 
 from config.actions import get_action
 
@@ -9,6 +10,8 @@ class Step:
 
 class Config:
     def __init__(self, path):
+        self.freshness = datetime.utcnow()
+
         with open(path, "r") as f:
             config = json.loads(f.read())
         self.courses = set(config.get("courses", []))

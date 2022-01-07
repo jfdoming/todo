@@ -10,7 +10,6 @@ from processors.event_processor import EventProcessor
 from collectors.todo_list_collector import TodoListCollector
 from collectors.done_collector import DoneCollector
 
-
 def main():
     args = parse_args()
 

@@ -1,11 +1,9 @@
-from datetime import datetime, timedelta
 import pytz
-import parsedatetime
-
-_DEADLINE_CAL = parsedatetime.Calendar()
+from datetime import datetime, timedelta
 
 class Expansion:
     def __init__(self, to):
+        import dateparser # Lazy import.
         if isinstance(to, str):
             self.name = to
             self.deadline = timedelta(0)
@@ -14,13 +12,15 @@ class Expansion:
         self.name = to["name"]
 
         now = datetime.utcnow().replace(tzinfo=pytz.utc)
-        self.deadline, rc = _DEADLINE_CAL.parseDT(
+        self.deadline = dateparser.parse(
             to["deadline"],
-            sourceTime=now,
-            tzinfo=pytz.utc,
+            settings={
+                "TIMEZONE": "UTC",
+                "TO_TIMEZONE": "UTC",
+                "RETURN_AS_TIMEZONE_AWARE": True,
+                "RELATIVE_BASE": now,
+            },
         )
-        if not rc:
-            raise TypeError("Failed to parse deadline string")
         if "relative" not in to or to["relative"]:
             self.deadline = self.deadline - now
 

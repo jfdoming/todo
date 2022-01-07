@@ -1,7 +1,4 @@
-from google_auth_oauthlib.flow import InstalledAppFlow
-from google.oauth2.credentials import Credentials
 from googleapiclient.discovery import build
-from google.auth.transport.requests import Request
 
 import os.path
 from datetime import datetime, timedelta
@@ -28,6 +25,7 @@ class CalendarAPI:
         # created automatically when the authorization flow completes for the first
         # time.
         if os.path.exists(TOKEN_FILE):
+            from google.oauth2.credentials import Credentials
             creds = Credentials.from_authorized_user_file(
                 TOKEN_FILE,
                 CalendarAPI.__SCOPES,
@@ -37,12 +35,14 @@ class CalendarAPI:
             create_new_token = True
             if creds and creds.expired and creds.refresh_token:
                 try:
+                    from google.auth.transport.requests import Request
                     creds.refresh(Request())
                     create_new_token = False
                 except:
                     pass
 
             if create_new_token:
+                from google_auth_oauthlib.flow import InstalledAppFlow
                 flow = InstalledAppFlow.from_client_secrets_file(
                     CREDENTIALS_FILE,
                     CalendarAPI.__SCOPES,
