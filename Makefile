@@ -9,7 +9,7 @@ run:
 
 build:
 	@. env/bin/activate && pyinstaller -p src/ src/main.py -Dyn todo
-	@cp src/*.json dist/todo/
+	@cp config/*.json dist/todo/
 
 install:
 	@[ -d env ] || python3 -m venv env

@@ -2,10 +2,7 @@ import os
 import sys
 import pickle
 
-_CONFIG_HOME = (
-    os.environ.get("CONFIG_HOME")
-    or os.path.join(os.path.dirname(sys.argv[0]), "config")
-)
+_CONFIG_HOME = (os.environ.get("CONFIG_HOME") or os.path.dirname(sys.argv[0]))
 
 def _config(name):
     return os.path.join(_CONFIG_HOME, name)
