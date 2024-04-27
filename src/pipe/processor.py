@@ -1,6 +1,6 @@
 from abc import abstractmethod
 
-from pipe import SENTINEL
+from pipe import SENTINEL, SKIP
 from pipe.source import Source
 from pipe.sink import Sink
 from utils.single_iter import single_iter
@@ -15,27 +15,26 @@ class Processor(Source, Sink):
         yield from self._process()
 
     def _consume(self):
-        item_map = self.process()
+        consume = self._send_to_pipe([self, self.produce()])
 
-        receivers = [child.consume() for child in self._children]
+        item_map = self.process()
 
         while (item := (yield)) != SENTINEL:
             item = item_map.send(item)
-            for child in receivers:
-                child.send(item)
+            if item is not SKIP:
+                for child in receivers:
+                    child.send(item)
             next(item_map)
 
         results = [
-            result for result in (
-                result_list
-                for result_list in (
-                    Source._terminate(child)
-                    for child in receivers
-                )
-                if result_list is not None
-            )
+            result for result_list in (
+                Source._terminate(child)
+                for child in receivers
+            ) if result_list is not None and not print("result_list:", result_list)
+            for result in result_list
         ]
 
+        print("processor result:", results)
         yield results
 
     def _produce(self):

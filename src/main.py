@@ -8,6 +8,7 @@ from views.clipboard_view import ClipboardView
 from processors.standard import StandardFormatter
 from processors.shareable import ShareableFormatter
 from processors.event_processor import EventProcessor
+from processors.done_filter import DoneFilter
 from collectors.todo_list_collector import TodoListCollector
 from collectors.done_collector import DoneCollector
 
@@ -37,16 +38,18 @@ def main():
     api = CalendarAPI()
     cal_lists = EventList.from_user_calendars(api)
 
-    # Convert all calendar events to Todo items.
-    todo_collector = TodoListCollector()
+    # Convert all calendar events to Todo items, filtering out items being
+    # marked as done.
+    done_filter = DoneFilter(args.done)
     for cal_list in cal_lists:
-        cal_list >> EventProcessor() >> todo_collector
+        cal_list >> EventProcessor() >> done_filter
+    done_filter >> TodoListCollector()
 
     # Explicit (non-member) invocation in order to collect all events in
     # parallel. Indexed to retrieve the first result.
-    primary_list = Source.send_to_pipe(*cal_lists)[0]
+    primary_list = Source.send_to_pipe(cal_lists)
 
-    primary_list >> DoneCollector(api, args.done)
+    primary_list >> DoneCollector(api)
 
     views = [CliView()]
 

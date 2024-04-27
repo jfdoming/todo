@@ -1,1 +1,2 @@
 SENTINEL = object()
+SKIP = object()
